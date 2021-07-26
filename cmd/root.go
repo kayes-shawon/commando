@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
+	"time"
 )
 
 var rootCmd = &cobra.Command{
 	Use: "commando",
 	Short: "A Command Line Application",
-	Long: `Application that will make life easier`,
+	Long: `Command Line Application that will make life easier`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Do Stuff Here
 		_ = cmd.Help()
@@ -31,16 +32,25 @@ var timeCmd = &cobra.Command{
 	Use: "time",
 	Short: "Time Now",
 	Long: `Representing local time`,
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		//if args[0] == 'uat'{
-		//	fmt.Println("Time: ", time.Now())
-		//}
+		if args[0] == "utc" {
+			fmt.Println(time.Now())
+			fmt.Println(time.Now().UTC().Format(time.RFC3339Nano))
+		}
 	},
 }
 
 
 
+
+func initConfig() {
+	fmt.Println("inside initConfig")
+}
+
 func init() {
+	cobra.OnInitialize(initConfig)
+
 	rootCmd.AddCommand(testCmd)
 	rootCmd.AddCommand(timeCmd)
 	var author string
